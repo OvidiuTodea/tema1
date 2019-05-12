@@ -30,5 +30,7 @@ namespace tema1.Models
 
         [EnumDataType(typeof(TypeExpenses))]
         public TypeExpenses Type { get; set; }
+
+        public List<Comment> Comments { get; set; }
     }
 }
