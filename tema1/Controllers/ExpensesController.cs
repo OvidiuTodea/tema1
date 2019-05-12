@@ -22,10 +22,10 @@ namespace tema1.Controllers
         // GET: api/Expenses
         [HttpGet]
         // ? permite unui struct sa ia si valoare null
-        public IEnumerable<Expense> Get([FromQuery]DateTime? from, [FromQuery]DateTime? to, [FromQuery]TypeExpenses? type)
+        public IEnumerable<Expense> Get([FromQuery]DateTime? from, [FromQuery]DateTime? to, [FromQuery]Models.TypeExpenses? type)
         {
             IQueryable<Expense> result = context.Expenses.Include(c => c.Comments);
-            if (from == null && to == null)
+            if (from == null && to == null && type==null)
             {
                 return result;
             }
