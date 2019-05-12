@@ -22,10 +22,10 @@ namespace tema1.Controllers
         // GET: api/Expenses
         [HttpGet]
         // ? permite unui struct sa ia si valoare null
-        public IEnumerable<Expense> Get([FromQuery]DateTime? from, [FromQuery]DateTime? to)
+        public IEnumerable<Expense> Get([FromQuery]DateTime? from, [FromQuery]DateTime? to, [FromQuery]TypeExpenses? type)
         {
-            IQueryable<Expense> result = context.Expenses;
-            if (from == null && to== null)
+            IQueryable<Expense> result = context.Expenses.Include(c => c.Comments);
+            if (from == null && to == null)
             {
                 return result;
             }
@@ -36,6 +36,10 @@ namespace tema1.Controllers
             if (to != null)
             {
                 result = result.Where(e => e.Date <= to);
+            }
+            if (type != null)
+            {
+                result = result.Where(e => e.Type.Equals(type));
             }
             return result;
         }
@@ -86,7 +90,7 @@ namespace tema1.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var existing = context.Expenses.FirstOrDefault(e => e.Id == id);
+            var existing = context.Expenses.Include(e => e.Comments).FirstOrDefault(e => e.Id == id);
             if (existing == null)
             {
                 return NotFound();
