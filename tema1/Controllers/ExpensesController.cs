@@ -21,9 +21,23 @@ namespace tema1.Controllers
 
         // GET: api/Expenses
         [HttpGet]
-        public IEnumerable<Expense> Get()
+        // ? permite unui struct sa ia si valoare null
+        public IEnumerable<Expense> Get([FromQuery]DateTime? from, [FromQuery]DateTime? to)
         {
-            return context.Expenses;
+            IQueryable<Expense> result = context.Expenses;
+            if (from == null && to== null)
+            {
+                return result;
+            }
+            if (from != null)
+            {
+                result = result.Where(e => e.Date >= from);
+            }
+            if (to != null)
+            {
+                result = result.Where(e => e.Date <= to);
+            }
+            return result;
         }
 
         // GET: api/Expenses/5
