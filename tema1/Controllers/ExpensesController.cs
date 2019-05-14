@@ -19,7 +19,40 @@ namespace tema1.Controllers
             this.context = context;
         }
 
-        // GET: api/Expenses
+        /// <summary>
+        /// Gets all expenses
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /expenses
+        ///     {
+        ///        "id": 7,
+    ///                 "description": "cort nou cu comentariu",
+   ///                   "sum": 2000,
+    ///                 "location": "Cluj",
+    ///                 "date": "2019-05-11T17:07:29.4468654",
+   ///                  "currency": "RON",
+   ///                  "type": 1,
+   ///                  "comments": [
+    ///                                {
+    ///                                  "id": 1,
+     ///                                 "text": "primul text",
+     ///                                 "important": true
+     ///                                },
+     ///                                {
+      ///                                 "id": 2,
+     ///                                  "text": "al doilea text",
+     ///                                  "important": false
+     ///                                 }
+  ///                                ]
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="from">Optional, filter by minimum Date</param>
+        /// <param name="to">Optional, filter by maximum Date</param>
+        /// <param name="type">Optional, filter by Type</param>
+        /// <returns>A list of expenses objects</returns>
         [HttpGet]
         // ? permite unui struct sa ia si valoare null
         public IEnumerable<Expense> Get([FromQuery]DateTime? from, [FromQuery]DateTime? to, [FromQuery]Models.TypeExpenses? type)
@@ -48,7 +81,9 @@ namespace tema1.Controllers
         [HttpGet("{id}", Name = "Get")]
         public IActionResult Get(int id)
         {
-            var existing = context.Expenses.FirstOrDefault(e => e.Id == id);
+            var existing = context.Expenses.
+                Include(c => c.Comments).
+                FirstOrDefault(e => e.Id == id);
             if (existing == null)
             {
                 return NotFound();
@@ -57,7 +92,40 @@ namespace tema1.Controllers
             return Ok(existing);
         }
 
-        // POST: api/Expenses
+        /// <summary>
+        /// Add an expense
+        /// </summary>
+        /// /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /expenses
+        ///     {
+        ///        "id": 7,
+        ///                 "description": "cort nou cu comentariu",
+        ///                   "sum": 2000,
+        ///                 "location": "Cluj",
+        ///                 "date": "2019-05-11T17:07:29.4468654",
+        ///                  "currency": "RON",
+        ///                  "type": 1,
+        ///                  "comments": [
+        ///                                {
+        ///                                  "id": 1,
+        ///                                 "text": "primul text",
+        ///                                 "important": true
+        ///                                },
+        ///                                {
+        ///                                 "id": 2,
+        ///                                  "text": "al doilea text",
+        ///                                  "important": false
+        ///                                 }
+        ///                                ]
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="expense">The expenses to add.</param>
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
         public void Post([FromBody] Expense expense)
         {
