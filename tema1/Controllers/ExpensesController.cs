@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using tema1.Models;
+using tema1.Services;
 
 namespace tema1.Controllers
 {
@@ -13,10 +14,12 @@ namespace tema1.Controllers
     [ApiController]
     public class ExpensesController : ControllerBase
     {
-        private ExpensesDbContext context;
-        public ExpensesController(ExpensesDbContext context)
+        //private ExpensesDbContext context;
+        private IExpenseService expenseService;
+
+        public ExpensesController(IExpenseService expenseService)
         {
-            this.context = context;
+            this.expenseService = expenseService;
         }
 
         /// <summary>
@@ -57,39 +60,19 @@ namespace tema1.Controllers
         // ? permite unui struct sa ia si valoare null
         public IEnumerable<Expense> Get([FromQuery]DateTime? from, [FromQuery]DateTime? to, [FromQuery]Models.TypeExpenses? type)
         {
-            IQueryable<Expense> result = context.Expenses.Include(c => c.Comments);
-            if (from == null && to == null && type==null)
-            {
-                return result;
-            }
-            if (from != null)
-            {
-                result = result.Where(e => e.Date >= from);
-            }
-            if (to != null)
-            {
-                result = result.Where(e => e.Date <= to);
-            }
-            if (type != null)
-            {
-                result = result.Where(e => e.Type.Equals(type));
-            }
-            return result;
+            return expenseService.GetAll(from, to, type);
         }
 
         // GET: api/Expenses/5
         [HttpGet("{id}", Name = "Get")]
         public IActionResult Get(int id)
         {
-            var existing = context.Expenses.
-                Include(c => c.Comments).
-                FirstOrDefault(e => e.Id == id);
-            if (existing == null)
+            var found = expenseService.GetById(id);
+            if (found == null)
             {
                 return NotFound();
             }
-
-            return Ok(existing);
+            return Ok(found);
         }
 
         /// <summary>
@@ -129,43 +112,27 @@ namespace tema1.Controllers
         [HttpPost]
         public void Post([FromBody] Expense expense)
         {
-            //if (!ModelState.IsValid)
-            //{
-
-            //}
-            context.Expenses.Add(expense);
-            context.SaveChanges();
+            expenseService.Create(expense);
         }
 
         // PUT: api/Expenses/5
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Expense expense)
         {
-            var existing = context.Expenses.AsNoTracking().FirstOrDefault(e => e.Id == id);
-            if (existing == null)
-            {
-                context.Expenses.Add(expense);
-                context.SaveChanges();
-                return Ok(expense);
-            }
-            expense.Id = id;
-            context.Expenses.Update(expense);
-            context.SaveChanges();
-            return Ok(expense);
+            var result = expenseService.Upsert(id, expense);
+            return Ok(result);
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var existing = context.Expenses.Include(e => e.Comments).FirstOrDefault(e => e.Id == id);
-            if (existing == null)
+            var result = expenseService.Delete(id);
+            if (result == null)
             {
                 return NotFound();
             }
-            context.Expenses.Remove(existing);
-            context.SaveChanges();
-            return Ok();
+            return Ok(result);
         }
     }
 }
