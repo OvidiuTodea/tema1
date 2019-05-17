@@ -15,6 +15,6 @@ namespace tema1.Models
 
         // un DbSet este un repository si o tabela din baza de date
         public DbSet<Expense> Expenses { get; set; }
-     //   public DbSet<Comment> Comments { get; set; }
+        public DbSet<Comment> Comments { get; set; }
     }
 }

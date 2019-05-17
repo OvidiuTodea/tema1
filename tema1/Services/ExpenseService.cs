@@ -37,7 +37,7 @@ namespace tema1.Services
         public Expense Create(Expense expense)
         {
             context.Expenses.Add(expense);
-            context.SaveChanges();
+            context.SaveChanges(); 
             return expense;
         }
 
