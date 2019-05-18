@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using tema1.Models;
+using tema1.ViewModels;
 
 namespace tema1.Services
 {
@@ -17,8 +18,8 @@ namespace tema1.Services
         /// <param name="to"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        IEnumerable<Expense> GetAll(DateTime? from=null, DateTime? to=null, Models.TypeExpenses? type=null);
-        Expense Create(Expense expense);
+        IEnumerable<ExpenseGetModel> GetAll(DateTime? from=null, DateTime? to=null, Models.TypeExpenses? type=null);
+        Expense Create(ExpensePostModel expense);
         Expense Upsert(int id, Expense expense);
         Expense Delete(int id);
         Expense GetById(int id);
@@ -34,11 +35,12 @@ namespace tema1.Services
             this.context = context;
         }
 
-        public Expense Create(Expense expense)
+        public Expense Create(ExpensePostModel expense)
         {
-            context.Expenses.Add(expense);
+            Expense toAdd = ExpensePostModel.ToExpense(expense);
+            context.Expenses.Add(toAdd);
             context.SaveChanges(); 
-            return expense;
+            return toAdd;
         }
 
         public Expense Delete(int id)
@@ -53,12 +55,14 @@ namespace tema1.Services
             return existing;
         }
 
-        public IEnumerable<Expense> GetAll(DateTime? from=null, DateTime? to=null, TypeExpenses? type=null)
+        public IEnumerable<ExpenseGetModel> GetAll(DateTime? from=null, DateTime? to=null, TypeExpenses? type=null)
         {
-            IQueryable<Expense> result = context.Expenses.Include(c => c.Comments);
+            IQueryable<Expense> result = context.
+                Expenses.
+                Include(c => c.Comments);
             if (from == null && to == null && type == null)
             {
-                return result;
+                return result.Select(e => ExpenseGetModel.FromExpense(e));
             }
             if (from != null)
             {
@@ -72,7 +76,7 @@ namespace tema1.Services
             {
                 result = result.Where(e => e.Type.Equals(type));
             }
-            return result;
+            return result.Select(e => ExpenseGetModel.FromExpense(e));
         }
 
         public Expense GetById(int id)

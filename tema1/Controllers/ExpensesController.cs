@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using tema1.Models;
 using tema1.Services;
+using tema1.ViewModels;
 
 namespace tema1.Controllers
 {
@@ -58,7 +59,7 @@ namespace tema1.Controllers
         /// <returns>A list of expenses objects</returns>
         [HttpGet]
         // ? permite unui struct sa ia si valoare null
-        public IEnumerable<Expense> Get([FromQuery]DateTime? from, [FromQuery]DateTime? to, [FromQuery]Models.TypeExpenses? type)
+        public IEnumerable<ExpenseGetModel> Get([FromQuery]DateTime? from, [FromQuery]DateTime? to, [FromQuery]Models.TypeExpenses? type)
         {
             return expenseService.GetAll(from, to, type);
         }
@@ -110,7 +111,7 @@ namespace tema1.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public void Post([FromBody] Expense expense)
+        public void Post([FromBody] ExpensePostModel expense)
         {
             expenseService.Create(expense);
         }
