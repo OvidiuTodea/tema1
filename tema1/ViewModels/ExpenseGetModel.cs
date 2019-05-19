@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using tema1.Models;
+﻿using tema1.Models;
 
 namespace tema1.ViewModels
 {

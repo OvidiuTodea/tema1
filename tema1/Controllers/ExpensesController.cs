@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using tema1.Models;
 using tema1.Services;
 using tema1.ViewModels;
@@ -15,7 +12,7 @@ namespace tema1.Controllers
     [ApiController]
     public class ExpensesController : ControllerBase
     {
-        //private ExpensesDbContext context;
+        
         private IExpenseService expenseService;
 
         public ExpensesController(IExpenseService expenseService)
@@ -32,24 +29,24 @@ namespace tema1.Controllers
         ///     POST /expenses
         ///     {
         ///        "id": 7,
-    ///                 "description": "cort nou cu comentariu",
-   ///                   "sum": 2000,
-    ///                 "location": "Cluj",
-    ///                 "date": "2019-05-11T17:07:29.4468654",
-   ///                  "currency": "RON",
-   ///                  "type": 1,
-   ///                  "comments": [
-    ///                                {
-    ///                                  "id": 1,
-     ///                                 "text": "primul text",
-     ///                                 "important": true
-     ///                                },
-     ///                                {
-      ///                                 "id": 2,
-     ///                                  "text": "al doilea text",
-     ///                                  "important": false
-     ///                                 }
-  ///                                ]
+        ///              "description": "cort nou cu comentariu",
+        ///                   "sum": 2000,
+        ///                 "location": "Cluj",
+        ///                 "date": "2019-05-11T17:07:29.4468654",
+        ///                  "currency": "RON",
+        ///                  "type": 1,
+        ///                  "comments": [
+        ///                                {
+        ///                                  "id": 1,
+        ///                                 "text": "primul text",
+        ///                                 "important": true
+        ///                                },
+        ///                                {
+        ///                                 "id": 2,
+        ///                                  "text": "al doilea text",
+        ///                                  "important": false
+        ///                                 }
+        ///                                ]
         ///     }
         ///
         /// </remarks>
@@ -63,7 +60,11 @@ namespace tema1.Controllers
         {
             return expenseService.GetAll(from, to, type);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: api/Expenses/5
         [HttpGet("{id}", Name = "Get")]
         public IActionResult Get(int id)
@@ -116,6 +117,12 @@ namespace tema1.Controllers
             expenseService.Create(expense);
         }
 
+        /// <summary>
+        /// Upsert an expense
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="expense"></param>
+        /// <returns></returns>
         // PUT: api/Expenses/5
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Expense expense)
@@ -124,7 +131,14 @@ namespace tema1.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Deletes a expense by id
+        /// </summary>
+        /// <param name="id">the id of the expense to be deleted</param>
+        /// <returns></returns>
         // DELETE: api/ApiWithActions/5
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
