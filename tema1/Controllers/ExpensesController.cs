@@ -41,6 +41,8 @@ namespace tema1.Controllers
         /// <param name="id">The given ID</param>
         /// <returns>The expense with the given ID</returns>
         // GET: api/Expenses/5
+        [ProducesResponseType(201)]
+        [ProducesResponseType(404)]
         [HttpGet("{id}", Name = "Get")]
         public IActionResult Get(int id)
         {
@@ -87,7 +89,7 @@ namespace tema1.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public void Post([FromBody] ExpensePostModel expense)
+        public void Post([FromBody] Expense expense)
         {
             expenseService.Create(expense);
         }
@@ -99,6 +101,8 @@ namespace tema1.Controllers
         /// <param name="expense"></param>
         /// <returns></returns>
         // PUT: api/Expenses/5
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Expense expense)
         {

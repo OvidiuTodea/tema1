@@ -20,6 +20,8 @@ namespace tema1.Controllers
         /// <param name="filter">a filter to be applied</param>
         /// <returns>A list of filtered comments</returns>
         // GET: api/Comments
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
         [HttpGet]
         public IEnumerable<CommentGetModel> Get([FromQuery]string filter)
         {

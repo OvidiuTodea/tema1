@@ -26,34 +26,53 @@ namespace tema1.Services
             List<CommentGetModel> resultComments = new List<CommentGetModel>();
             List<CommentGetModel> resultCommentsNoFilter = new List<CommentGetModel>();
 
-            foreach (Expense e in result)
+
+            //foreach (Expense e in result)
+            //{
+            //    e.Comments.ForEach(c =>
+            //    {
+            //        if (c.Text == null || filter == null)
+            //        {
+            //            CommentGetModel comment = new CommentGetModel
+            //            {
+            //                Important = c.Important,
+            //                Text = c.Text,
+            //                ExpenseId = e.Id
+
+            //            };
+            //            resultCommentsNoFilter.Add(comment);
+            //        }
+            //        else if (c.Text.Contains(filter))
+            //        {
+            //            CommentGetModel comment = new CommentGetModel
+            //            {
+            //                Important = c.Important,
+            //                Text = c.Text,
+            //                ExpenseId = e.Id
+
+            //            };
+            //            resultComments.Add(comment);
+            //        }
+            //    });
+        //}
+
+            foreach (Expense expense in result)
             {
-                e.Comments.ForEach(c =>
+                expense.Comments.ForEach(comment =>
                 {
-                    if (c.Text == null || filter == null)
-                    {
-                        CommentGetModel comment = new CommentGetModel
-                        {
-                            Important = c.Important,
-                            Text = c.Text,
-                            ExpenseId = e.Id
+                    CommentGetModel newComment = CommentGetModel.FromComment(comment, expense);
 
-                        };
-                        resultCommentsNoFilter.Add(comment);
+                    if (comment.Text == null || filter == null)
+                    {
+                        resultCommentsNoFilter.Add(newComment);
                     }
-                    else if (c.Text.Contains(filter))
+                    else if (comment.Text.Contains(filter))
                     {
-                        CommentGetModel comment = new CommentGetModel
-                        {
-                            Important = c.Important,
-                            Text = c.Text,
-                            ExpenseId = e.Id
-
-                        };
-                        resultComments.Add(comment);
+                        resultComments.Add(newComment);
                     }
                 });
             }
+
             if (filter == null)
             {
                 return resultCommentsNoFilter;

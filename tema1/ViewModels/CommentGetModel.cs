@@ -9,15 +9,15 @@ namespace tema1.ViewModels
         public bool Important { get; set; }
         public int ExpenseId { get; set; }
 
-        //public static CommentGetModel FromComment(Comment comment)
-        //{
-        //    return new CommentGetModel
-        //    {
-        //       ID = comment.Id,
-        //       Text = comment.Text,
-        //       Important = comment.Important,
-        //       //ExpenseId = comment.ExpenseId
-        //    };
-        //}
+        public static CommentGetModel FromComment(Comment comment, Expense expense)
+        {
+            return new CommentGetModel
+            {
+                ID = comment.Id,
+                Text = comment.Text,
+                Important = comment.Important,
+                ExpenseId = expense.Id
+            };
+        }
     }
 }

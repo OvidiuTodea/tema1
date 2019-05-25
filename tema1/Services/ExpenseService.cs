@@ -18,7 +18,7 @@ namespace tema1.Services
         /// <param name="type"></param>
         /// <returns></returns>
         IEnumerable<ExpenseGetModel> GetAll(DateTime? from=null, DateTime? to=null, Models.TypeExpenses? type=null);
-        Expense Create(ExpensePostModel expense);
+        Expense Create(Expense expense);
         Expense Upsert(int id, Expense expense);
         Expense Delete(int id);
         Expense GetById(int id);
@@ -34,17 +34,21 @@ namespace tema1.Services
             this.context = context;
         }
 
-        public Expense Create(ExpensePostModel expense)
+        public Expense Create(Expense expense)
         {
-            Expense toAdd = ExpensePostModel.ToExpense(expense);
-            context.Expenses.Add(toAdd);
+            
+            context.Expenses.Add(expense);
             context.SaveChanges(); 
-            return toAdd;
+            return expense;
         }
+
+        
 
         public Expense Delete(int id)
         {
-            var existing = context.Expenses.Include(e => e.Comments).FirstOrDefault(e => e.Id == id);
+            var existing = context.
+                Expenses.
+                Include(c => c.Comments).FirstOrDefault(expense => expense.Id == id);
             if (existing == null)
             {
                 return null;
