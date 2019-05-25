@@ -59,6 +59,7 @@ namespace tema1.Services
             IQueryable<Expense> result = context.
                 Expenses.
                 Include(c => c.Comments);
+
             if (from == null && to == null && type == null)
             {
                 return result.Select(e => ExpenseGetModel.FromExpense(e));

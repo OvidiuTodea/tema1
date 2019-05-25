@@ -26,9 +26,9 @@ namespace tema1.Services
             List<CommentGetModel> resultComments = new List<CommentGetModel>();
             List<CommentGetModel> resultCommentsNoFilter = new List<CommentGetModel>();
 
-            foreach (Expense m in result)
+            foreach (Expense e in result)
             {
-                m.Comments.ForEach(c =>
+                e.Comments.ForEach(c =>
                 {
                     if (c.Text == null || filter == null)
                     {
@@ -36,7 +36,7 @@ namespace tema1.Services
                         {
                             Important = c.Important,
                             Text = c.Text,
-                            ExpenseId = m.Id
+                            ExpenseId = e.Id
 
                         };
                         resultCommentsNoFilter.Add(comment);
@@ -47,7 +47,7 @@ namespace tema1.Services
                         {
                             Important = c.Important,
                             Text = c.Text,
-                            ExpenseId = m.Id
+                            ExpenseId = e.Id
 
                         };
                         resultComments.Add(comment);

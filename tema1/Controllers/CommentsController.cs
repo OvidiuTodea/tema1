@@ -17,8 +17,8 @@ namespace tema1.Controllers
         /// <summary>
         /// Gets All Comments
         /// </summary>
-        /// <param name="filter"></param>
-        /// <returns></returns>
+        /// <param name="filter">a filter to be applied</param>
+        /// <returns>A list of filtered comments</returns>
         // GET: api/Comments
         [HttpGet]
         public IEnumerable<CommentGetModel> Get([FromQuery]string filter)

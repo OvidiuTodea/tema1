@@ -21,39 +21,14 @@ namespace tema1.Controllers
         }
 
         /// <summary>
-        /// Gets all expenses
+        /// Get all expenses
         /// </summary>
-        /// <remarks>
-        /// Sample request:
-        ///
-        ///     POST /expenses
-        ///     {
-        ///        "id": 7,
-        ///              "description": "cort nou cu comentariu",
-        ///                   "sum": 2000,
-        ///                 "location": "Cluj",
-        ///                 "date": "2019-05-11T17:07:29.4468654",
-        ///                  "currency": "RON",
-        ///                  "type": 1,
-        ///                  "comments": [
-        ///                                {
-        ///                                  "id": 1,
-        ///                                 "text": "primul text",
-        ///                                 "important": true
-        ///                                },
-        ///                                {
-        ///                                 "id": 2,
-        ///                                  "text": "al doilea text",
-        ///                                  "important": false
-        ///                                 }
-        ///                                ]
-        ///     }
-        ///
-        /// </remarks>
-        /// <param name="from">Optional, filter by minimum Date</param>
-        /// <param name="to">Optional, filter by maximum Date</param>
-        /// <param name="type">Optional, filter by Type</param>
-        /// <returns>A list of expenses objects</returns>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="type"></param>
+        /// <returns>a list of expenses</returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
         // ? permite unui struct sa ia si valoare null
         public IEnumerable<ExpenseGetModel> Get([FromQuery]DateTime? from, [FromQuery]DateTime? to, [FromQuery]Models.TypeExpenses? type)
@@ -61,10 +36,10 @@ namespace tema1.Controllers
             return expenseService.GetAll(from, to, type);
         }
         /// <summary>
-        /// 
+        /// Get an expense by ID
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">The given ID</param>
+        /// <returns>The expense with the given ID</returns>
         // GET: api/Expenses/5
         [HttpGet("{id}", Name = "Get")]
         public IActionResult Get(int id)
@@ -132,7 +107,7 @@ namespace tema1.Controllers
         }
 
         /// <summary>
-        /// Deletes a expense by id
+        /// Deletes an expense by id
         /// </summary>
         /// <param name="id">the id of the expense to be deleted</param>
         /// <returns></returns>
