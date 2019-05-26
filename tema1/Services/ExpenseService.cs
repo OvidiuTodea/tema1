@@ -53,6 +53,10 @@ namespace tema1.Services
             {
                 return null;
             }
+            foreach (Comment c in existing.Comments)
+            {
+                context.Comments.Remove(c);
+            }
             context.Expenses.Remove(existing);
             context.SaveChanges();
             return existing;
